@@ -27,3 +27,7 @@ class NeuralNetwork:
             for name, param in layer.params.items():
                 grad = layer.grads[name]
                 yield param, grad
+
+    def __repr__(self) -> str:
+        output = [repr(layer) for layer in self.layers]
+        return "Neural Network:\n" + "\n".join(output)

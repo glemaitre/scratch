@@ -16,11 +16,11 @@ class Layer(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def backward(self, grads: NDArray[np.float32]) -> NDArray[np.float32]:
+    def backward(self, grad: NDArray[np.float32]) -> NDArray[np.float32]:
         raise NotImplementedError
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__} layer"
+        return f"{self.__class__.__name__} layer".rstrip()
 
 
 class Linear(Layer):
@@ -43,16 +43,21 @@ class Linear(Layer):
         return inputs @ self.params["w"] + self.params["b"]
 
     def backward(self, grad: NDArray[np.float32]) -> NDArray[np.float32]:
+        """
+        if y = f(x) and x = a @ b + c
+        then dy/da = f'(x) @ b.T
+        and dy/db = a.T @ f'(x)
+        and dy/dc = f'(x)
+        """
         self.grads["b"] = np.sum(grad, axis=0)
         self.grads["w"] = self.inputs.T @ grad
         return grad @ self.params["w"].T
 
     def __repr__(self) -> str:
-        return f"""
-        {super().__repr__()}:
+        return f"""{super().__repr__()}:
         Dimensions of W: {self.params['w'].shape}
         Dimension of b: {self.params['b'].shape}
-        """
+        """.rstrip()
 
 
 F = Callable[[NDArray[np.float32]], NDArray[np.float32]]

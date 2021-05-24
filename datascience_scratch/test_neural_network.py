@@ -14,6 +14,7 @@ def test_neural_network_xor():
             Sigmoid(),
         ]
     )
+
     nn.layers[0].params["w"] = np.array([[20, 20], [20, 20]])
     nn.layers[0].params["b"] = np.array([-30, -10])
     nn.layers[2].params["w"] = np.array([[-60], [60]])
