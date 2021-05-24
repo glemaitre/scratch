@@ -21,6 +21,18 @@ class MultiLayerPerceptronClassifier:
         self.hidden_layer_sizes = hidden_layer_sizes
         self.seed = seed
 
+    def _loss(
+        self,
+        X: NDArray[np.float32],
+        y: NDArray[np.int8],
+        eval_gradient: bool = True,
+    ):
+        outputs = self.decision_function(X)
+        hidden_outputs, outputs = outputs[:-1], outputs[-1]
+
+        # outputs gradients
+        output_deltas = outputs * (1 - outputs) * (outputs - y)
+
     def fit(
         self, X: NDArray[np.float32], y: NDArray[np.int8]
     ) -> MultiLayerPerceptronClassifier:
@@ -29,11 +41,11 @@ class MultiLayerPerceptronClassifier:
 
         layer_size = (X.shape[1],) + self.hidden_layer_sizes + (1,)
         self.coefs_ = [
-            self._rng.random(size=(n_input, n_output), dtype=np.float32)
+            self._rng.random(size=(n_input, n_output), dtype=X.dtype)
             for n_input, n_output in zip(layer_size, layer_size[1:])
         ]
         self.intercepts_ = [
-            self._rng.random(size=(n_neurons,), dtype=np.float32)
+            self._rng.random(size=(n_neurons,), dtype=X.dtype)
             for n_neurons in layer_size[1:]
         ]
 
