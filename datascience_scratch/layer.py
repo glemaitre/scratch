@@ -3,7 +3,7 @@ from typing import Callable, Dict, Optional
 
 import numpy as np
 from numpy.typing import NDArray
-from scipy.special import expit
+from scipy.special import expit  # type: ignore
 
 
 class Layer(ABC):
@@ -60,6 +60,11 @@ class Linear(Layer):
         """.rstrip()
 
 
+LAYERS = {
+    "linear": Linear,
+}
+
+
 F = Callable[[NDArray[np.float32]], NDArray[np.float32]]
 
 
@@ -103,3 +108,9 @@ def sigmoid_prime(x: NDArray[np.float32]) -> NDArray[np.float32]:
 class Sigmoid(Activation):
     def __init__(self) -> None:
         super().__init__(sigmoid, sigmoid_prime)
+
+
+ACTIVATIONS = {
+    "sigmoid": Sigmoid,
+    "tanh": Tanh,
+}
