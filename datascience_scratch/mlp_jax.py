@@ -86,6 +86,10 @@ class MLPClassifier(ClassifierMixin, BaseEstimator):
         )
         return vmap_forward(X, self.coefs_, self.intercepts_)
 
+    def backward(self, grad):
+        for coef, intercept in reversed(zip(self.coefs_, self.intercepts_)):
+            
+
     @staticmethod
     def _target_encoder(y, n_classes):
         return jnp.array(y[:, None] == jnp.arange(n_classes), jnp.float32)
