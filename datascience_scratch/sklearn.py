@@ -70,6 +70,7 @@ class MLPClassifier(ClassifierMixin, BaseEstimator):
             y_pred = self.model_.forward(X)
             epoch_loss = self.loss_.loss(y, y_pred)
             gradient_loss = self.loss_.grad(y, y_pred)
+            print(gradient_loss)
             self.model_.backward(gradient_loss)
             self.solver_.step(self.model_)
 
